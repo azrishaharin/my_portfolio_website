@@ -7,18 +7,54 @@ import 'react-modern-drawer/dist/index.css';
 import { getSocialData } from './models/social';
 import { getRepo } from './models/github_repo';
 import resume from './assets/resume.pdf';
+import { useState, useRef, useEffect } from 'react';
 
 function App() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState(null);
+  const navRef = useRef(null);
+
+  const handleIntersection = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setActiveItem(entry.target.id);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5,
+    });
+
+    const sections = document.querySelectorAll('section');
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const toggleDrawer = () => {
     setIsOpen((prevState) => !prevState);
   };
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
+    var offset = 0;
+    var offsetPosition = 0;
     if (element) {
-      const offset = 90; // Adjust this value to add the desired distance
-      const offsetPosition = element.offsetTop - offset;
+      console.log(`${element.id}: ${element.offsetTop}`);
+      if (element.id === 'contact') {
+        offsetPosition = element.offsetTop;
+      } else {
+        offset = 90; // Adjust this value to add the desired distance
+        offsetPosition = element.offsetTop - offset;
+      }
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
@@ -83,10 +119,10 @@ function App() {
             <img src={logo} alt="Logo" className='h-6' />
           </div>
           <div className='nav-bar-menu'>
-            <nav className='flex gap-10 items-center'>
-              <span className='cursor-pointer text-slate hover:border-b-4 border-slate-700' onClick={() => scrollToSection('home')}>Home</span>
-              <span className='cursor-pointer text-slate hover:border-b-4 border-slate-700' onClick={() => scrollToSection('about')}>About</span>
-              <span className='cursor-pointer text-slate hover:border-b-4 border-slate-700' onClick={() => scrollToSection('contact')}>Contact</span>
+            <nav ref={navRef} className='flex gap-10 items-center'>
+              <span className={activeItem === 'home' ? 'nav-span-active' : 'nav-span'} onClick={() => scrollToSection('home')}>Home</span>
+              <span className={activeItem === 'about' ? 'nav-span-active' : 'nav-span'} onClick={() => scrollToSection('about')}>About</span>
+              <span className={activeItem === 'contact' ? 'nav-span-active' : 'nav-span'} onClick={() => scrollToSection('contact')}>Contact</span>
               <a
               href={resume}
               download="resume"
