@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +14,25 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-in.show {
+  opacity: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .nav-bar-menu {
+    display: none;
+  }
+  
+}
+
+@media screen and (min-width: 768px) {
+  .burger-menu {
+    display: none;
+  }
 }
