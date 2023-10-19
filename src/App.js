@@ -107,7 +107,7 @@ function App() {
             <div className='space-y-5 order-2 lg:order-1 justify-center items-center lg:items-start flex flex-col'>
               <div className='text-center lg:text-left'>
                 <h1 className='text-4xl font-bold mb-2'>Hello, I'm Azri</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p>Frontend Developer, Photographer and a Father</p>
               </div>
               <a
               href={resume}
